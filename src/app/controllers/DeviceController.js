@@ -1,16 +1,19 @@
 const Device = require('../model/Device')
+const { multipleMongooseToObject } = require('../../utils/mongoose')
 
 class DeviceController {
     show(req, res, next) {
         Device.find({})
-            .then(devices => res.json(devices))
+            .then(devices => res.render('/devices', {
+                devices: multipleMongooseToObject(devices)
+            }))
             .catch(next)
     }
 
     create(req, res, next) {
         const device = new Device(req.body)
         device.save()
-            .then(devices => res.json(devices))
+            .then(() => res.redirect('/devices/create'))
             .catch(error => {
                 
             })
@@ -18,15 +21,13 @@ class DeviceController {
 
     update(req, res, next) {
         Device.updateOne({ _id: req.params.id }, req.body)
-            .then(res.status(200).json("Updated successfully!"))
+            .then(() => res.redirect('/devices/create'))
             .catch(next)
     }
     
     delete(req, res, next) {
         Device.deleteOne({ _id: req.params.id })
-            .then(devices => {
-                res.status(200).json("Deleted successfully") 
-            })
+            .then(() => res.redirect('back'))
             .catch(next)
     }
 }
