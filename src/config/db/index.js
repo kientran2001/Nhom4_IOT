@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 mongoose.set('strictQuery', false);
-
 async function connect() {
   try {
     await mongoose.connect(
-      'mongodb+srv://iot:iot@iot.oyv2rib.mongodb.net/IOT',
+      process.env.DB_ACCESS,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -13,7 +13,7 @@ async function connect() {
     );
     console.log('Connect Successfully !!!');
   } catch (error) {
-    console.log("Connect fail");
+    console.log(error);
   }
 }
 
