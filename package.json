@@ -1,34 +1,29 @@
 {
-  "name": "nhom4_iot",
+  "name": "login",
   "version": "1.0.0",
-  "description": "Smart Home",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --inspect src/index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kientran2001/Nhom4_IOT.git"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kientran2001/Nhom4_IOT/issues"
-  },
-  "homepage": "https://github.com/kientran2001/Nhom4_IOT#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "express-handlebars": "^6.0.6",
-    "method-override": "^3.0.0",
-    "mongoose": "^6.7.2",
-    "mongoose-delete": "^0.5.4",
-    "mongoose-slug-generator": "^1.0.4"
+    "http": "^0.0.1-security",
+    "ip": "^2.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.3",
+    "mongoose-paginate-v2": "^1.7.1",
+    "mqtt": "^4.3.7",
+    "nodemailer": "^6.8.0"
   },
   "devDependencies": {
-    "morgan": "^1.10.0",
-    "node-sass": "^8.0.0",
     "nodemon": "^2.0.20"
   }
 }
