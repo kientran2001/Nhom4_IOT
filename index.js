@@ -5,13 +5,22 @@ const http = require('http');
 const mqtt = require("mqtt")
 const client = mqtt.connect("mqtt://broker.hivemq.com:1883")
 const Device = require('./models/device/device.model')
-client.on("connect", function () {
+client.on("connect", async function () {
     client.subscribe("/ktmt/out", function (err) {
 
         if (err) {
             console.log("subscribed error");
         } else console.log("Server has subscribed successfully");
     });
+    const devices = await Device.find()
+    devices.map((device) => {
+        client.publish("/ktmt/in", JSON.stringify(device), function (err) {
+            if (err) {
+                console.log("published error");
+            } else console.log("Server has published successfully");
+        });
+    })
+
 });
 
 client.on("message", (topic, message) => {
@@ -19,18 +28,18 @@ client.on("message", (topic, message) => {
         // console.log(1);
         const obj = JSON.parse(message.toString());
         obj.updatedAt = new Date();
-        // console.log("obj: ", obj);
-        // Device.findById(obj._id)
-        //     .then((data) => {
-        //         if (data) {
-        //             // console.log(data);
-        //         } else {
-        //             console.log("device khong ton tai");
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log("connect db error");
-        //     });
+        console.log("obj: ", obj);
+        Device.findById(obj._id)
+            .then((data) => {
+                if (data) {
+                    // console.log(data);
+                } else {
+                    console.log("device khong ton tai");
+                }
+            })
+            .catch((err) => {
+                console.log("connect db error");
+            });
     } catch (err) {
         console.log("error: ", err.message);
     }
@@ -75,7 +84,7 @@ app.get('/a', (req, res) => {
 const ip = require('ip');
 ipAddress = ip.address();
 console.log(ipAddress);
-app.listen(port, ipAddress, () => {
+app.listen(port, () => {
     console.log("Server is running at localhost:" + port);
 });
 // -----------------------START SERVER SUCCESSFULLY---------------------------
