@@ -1,5 +1,8 @@
 const deviceService = require('./device.service');
 
+const mqtt = require("mqtt")
+const client = mqtt.connect("mqtt://broker.hivemq.com:1883")
+
 exports.createNewDevice = async (req, res) => {
     try {
         let data = req.body;
@@ -23,7 +26,6 @@ exports.getDetailDevice = async ( req, res ) => {
     try {
         let id = req.params.id;
         let device = await deviceService.getDetailDevice(id)
-
         res.status(200).json({
             success: true,
             messages: ["Lấy dữ liệu thiết bị thành công"],
@@ -65,6 +67,20 @@ exports.updateDevice = async ( req, res ) => {
     try {
         let id = req.params.id;
         let data = req.body;
+        if(data.status) {
+            client.publish("/ktmt/in", "on", function (err) {
+                if (err) {
+                    console.log("published error");
+                } else console.log("Server has published successfully");
+            });
+        } else {
+            client.publish("/ktmt/in", "off", function (err) {
+                if (err) {
+                    console.log("published error");
+                } else console.log("Server has published successfully");
+            });
+        }
+        
         let device = await deviceService.updateDevice( id, data)
 
         res.status(200).json({
