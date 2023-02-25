@@ -5,6 +5,9 @@ const http = require('http');
 const mqtt = require("mqtt")
 const client = mqtt.connect("mqtt://broker.hivemq.com:1883")
 const Device = require('./models/device/device.model')
+var mongoose = require("mongoose");
+var ObjectId = require('mongodb').ObjectId;;
+
 client.on("connect", async function () {
     client.subscribe("/ktmt/out", function (err) {
 
@@ -28,11 +31,16 @@ client.on("message", (topic, message) => {
         // console.log(1);
         const obj = JSON.parse(message.toString());
         obj.updatedAt = new Date();
-        console.log("obj: ", obj);
+        // console.log("objID: ", obj._id, typeof obj._id)
+        // console.log("obj: ", obj)
+        const ID = obj._id.split('"');
+        console.log("ID: ", ID[1])
+        obj._id = ID[1]
+        console.log("obj: ", obj)
         Device.findById(obj._id)
             .then((data) => {
                 if (data) {
-                    // console.log(data);
+                    console.log(data);
                 } else {
                     console.log("device khong ton tai");
                 }
