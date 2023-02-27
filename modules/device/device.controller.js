@@ -67,19 +67,18 @@ exports.updateDevice = async ( req, res ) => {
     try {
         let id = req.params.id;
         let data = req.body;
+        let msg;
         if(data.status) {
-            client.publish("/ktmt/in", "on", function (err) {
-                if (err) {
-                    console.log("published error");
-                } else console.log("Server has published successfully");
-            });
+            msg = 'on' + id;
+            // console.log(msg);
         } else {
-            client.publish("/ktmt/in", "off", function (err) {
-                if (err) {
-                    console.log("published error");
-                } else console.log("Server has published successfully");
-            });
+            msg = 'off' + id;
         }
+        client.publish("/ktmt/in", msg, function (err) {
+            if (err) {
+                console.log("published error");
+            } else console.log("Server has published successfully");
+        });
         
         let device = await deviceService.updateDevice( id, data)
 
