@@ -5,6 +5,8 @@ const http = require('http');
 const mqtt = require("mqtt")
 const client = mqtt.connect("mqtt://broker.hivemq.com:1883")
 const Device = require('./models/device/device.model')
+const Home = require('./models/home/home.model')
+const supervisorService = require('./modules/supervisor/supervisor.service')
 var mongoose = require("mongoose");
 var ObjectId = require('mongodb').ObjectId;;
 
@@ -28,19 +30,31 @@ client.on("connect", async function () {
 
 client.on("message", (topic, message) => {
     try {
+        
         // console.log(1);
         const obj = JSON.parse(message.toString());
         obj.updatedAt = new Date();
         // console.log("objID: ", obj._id, typeof obj._id)
         // console.log("obj: ", obj)
         const ID = obj._id.split('"');
-        console.log("ID: ", ID[1])
-        obj._id = ID[1]
+        console.log("ID: ", ID[1]);
+        obj._id = ID[1];
+
+
         console.log("obj: ", obj)
         Device.findById(obj._id)
             .then((data) => {
                 if (data) {
                     console.log(data);
+                    // const re = /"(.*?)"/g;
+                    // var matches = data.homeId.matches(re);
+                    // console.log( matches[1]);
+                    var supData = {
+                        'homeId': mongoose.Types.ObjectId(String(data.homeId)),
+                        'temperature':  obj.temperature,
+                        'humidity': obj.humidity
+                    }
+                    supervisorService.createSupervisor(supData);
                 } else {
                     console.log("device khong ton tai");
                 }
@@ -64,6 +78,7 @@ const auth = require('./modules/auth/auth.route');
 const home = require('./modules/home/home.route');
 const device = require('./modules/device/device.route');
 const sensor = require('./modules/sensor/sensor.route');
+const supervisor = require('./modules/supervisor/supervisor.route');
 
 var app = express();
 
@@ -83,6 +98,7 @@ app.use("/auth", auth);
 app.use("/home", home);
 app.use("/device", device);
 app.use("/sensor", sensor);
+app.use("/supervisor", supervisor);
 
 const port = 8080;
 app.get('/a', (req, res) => {
