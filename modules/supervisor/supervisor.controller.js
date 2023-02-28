@@ -19,3 +19,61 @@ exports.createNewsupervisor = async (req, res) => {
         });
     }
 }
+
+exports.getSupervisorDetail = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let supervisor = await supervisorService.getSupervisorDetail(id)
+
+        res.status(200).json({
+            success: true,
+            messages: ["Lấy dữ liệu cảm biến thành công"],
+            content: supervisor
+        });
+    } catch (error) {
+
+        res.status(400).json({
+            success: false,
+            messages: ["Lấy dữ liệu cảm biến không thành công"],
+            content: error.message
+        });
+    }
+}
+
+exports.getAllSupervisors = async (req, res) => {
+    try {
+        let supervisors = await supervisorService.getAllSupervisors()
+
+        res.status(200).json({
+            success: true,
+            messages: ["Lấy dữ liệu cảm biến thành công"],
+            content: supervisors
+        });
+    } catch (error) {
+
+        res.status(400).json({
+            success: false,
+            messages: ["Lấy dữ liệu cảm biến không thành công"],
+            content: error.message
+        });
+    }
+}
+
+exports.getFiveRecentSupervisors = async (req, res) => {
+    try {
+        let supervisors = await supervisorService.getFiveRecentSupervisors()
+
+        res.status(200).json({
+            success: true,
+            messages: ["Lấy dữ liệu cảm biến thành công"],
+            content: supervisors
+        });
+    } catch (error) {
+
+        res.status(400).json({
+            success: false,
+            messages: ["Lấy dữ liệu cảm biến không thành công"],
+            content: error.message
+        });
+    }
+}
