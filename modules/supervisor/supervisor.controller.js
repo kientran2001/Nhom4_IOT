@@ -64,11 +64,11 @@ exports.getFiveRecentSupervisors = async (req, res) => {
     try {
         let homeId = req.params.homeId;
         let supervisors = await supervisorService.getFiveRecentSupervisors(homeId)
-
+        let msg = supervisors.supervisors
         res.status(200).json({
-            success: true,
-            messages: ["Lấy dữ liệu cảm biến thành công"],
-            content: supervisors
+            /* success: true,
+            messages: ["Lấy dữ liệu cảm biến thành công"], */
+            msg
         });
     } catch (error) {
 
