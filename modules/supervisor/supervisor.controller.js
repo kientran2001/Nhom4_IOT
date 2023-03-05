@@ -42,7 +42,8 @@ exports.getSupervisorDetail = async (req, res) => {
 
 exports.getAllSupervisors = async (req, res) => {
     try {
-        let supervisors = await supervisorService.getAllSupervisors()
+        let homeId = req.params.homeId;
+        let supervisors = await supervisorService.getAllSupervisors(homeId)
 
         res.status(200).json({
             success: true,
@@ -61,7 +62,8 @@ exports.getAllSupervisors = async (req, res) => {
 
 exports.getFiveRecentSupervisors = async (req, res) => {
     try {
-        let supervisors = await supervisorService.getFiveRecentSupervisors()
+        let homeId = req.params.homeId;
+        let supervisors = await supervisorService.getFiveRecentSupervisors(homeId)
 
         res.status(200).json({
             success: true,

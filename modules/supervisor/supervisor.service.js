@@ -10,7 +10,7 @@ exports.createSupervisor = async (data) => {
 exports.getSupervisorDetail = async (id) => {
 
 
-    let supervisor = await Supervisor
+    let supervisor = await supervisor
         .findById(id)
 
     if (!supervisor) {
@@ -19,24 +19,24 @@ exports.getSupervisorDetail = async (id) => {
     return { supervisor }
 }
 
-exports.getAllSupervisors = async () => {
-    let supervisors = await Supervisor
-        .find({})
+exports.getAllSupervisors = async (homeId) => {
+    let supervisors = await supervisor
+        .find({ homeId: homeId })
 
     if(!supervisors) {
         throw Error("Supervisor is not existing")
     }
-    return { supervisors}
+    return { supervisors }
 }
 
-exports.getFiveRecentSupervisors = async () => {
-    let supervisors = await Supervisor
-        .find({})
+exports.getFiveRecentSupervisors = async (homeId) => {
+    let supervisors = await supervisor
+        .find({ homeId: homeId })
         .sort({ updatedAt: -1 })
         .limit(5)
 
     if(!supervisors) {
         throw Error("Supervisor is not existing")
     }
-    return { supervisors}
+    return { supervisors }
 }
